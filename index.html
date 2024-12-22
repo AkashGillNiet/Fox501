@@ -14,8 +14,8 @@
   <h1>Stream Player with CORS Proxy</h1>
 
   <!-- Input Box for Stream URL -->
-  <label for="streamUrl">Enter Stream URL:</label>
-  <input type="text" id="streamUrl" placeholder="Enter stream URL (M3U8)">
+  <label for="streamUrl">Enter Stream URL (M3U8):</label>
+  <input type="text" id="streamUrl" placeholder="Enter M3U8 stream URL">
   <button onclick="playStream()">Play Stream</button>
 
   <!-- Video.js Player -->
@@ -30,8 +30,8 @@
 
       // If the URL is not empty
       if (streamUrl) {
-        // Use CORS proxy to bypass restrictions
-        var proxyUrl = "https://api.allorigins.win/raw?url=" + streamUrl;
+        // Use CORS Anywhere to bypass restrictions
+        var proxyUrl = "https://cors-anywhere.herokuapp.com/" + streamUrl;
 
         // Set the proxy URL as the source for the video player
         var player = videojs('my-video');
