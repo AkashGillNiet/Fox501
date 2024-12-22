@@ -28,8 +28,8 @@
 
       // If the URL is not empty
       if (streamUrl) {
-        // Use CORS Anywhere to bypass restrictions
-        var proxyUrl = "https://cors-anywhere.herokuapp.com/" + streamUrl;
+        // Use AllOrigins Proxy to bypass CORS and geo-blocking
+        var proxyUrl = "https://api.allorigins.win/raw?url=" + streamUrl;
 
         // Create a new Shaka Player instance
         var video = document.getElementById('video');
