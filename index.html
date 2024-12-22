@@ -15,7 +15,7 @@
 
   <!-- Input Box for Stream URL -->
   <label for="streamUrl">Enter Stream URL:</label>
-  <input type="text" id="streamUrl" placeholder="Enter stream URL">
+  <input type="text" id="streamUrl" placeholder="Enter stream URL (M3U8)">
   <button onclick="playStream()">Play Stream</button>
 
   <!-- Video.js Player -->
@@ -31,12 +31,14 @@
       // If the URL is not empty
       if (streamUrl) {
         // Use CORS proxy to bypass restrictions
-        var proxyUrl = "https://thingproxy.freeboard.io/fetch/" + streamUrl;
+        var proxyUrl = "https://api.allorigins.win/raw?url=" + streamUrl;
 
         // Set the proxy URL as the source for the video player
         var player = videojs('my-video');
         player.src({ type: "application/x-mpegURL", src: proxyUrl });
-        player.play();  // Start the video
+
+        // Start playing the video
+        player.play();  
       } else {
         alert("Please enter a valid stream URL.");
       }
