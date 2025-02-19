@@ -1,182 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Niet EnterSports</title>
-  <link href="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.css" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      height: 100%;
-    }
-    .video-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #video-player {
-      width: 100%;
-      height: 100%;
-    }
-    .logo {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
-    .logo img {
-      width: 100px;
-      height: auto;
-    }
-    .quality-select {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 15;
-    }
-    .quality-select select {
-      background-color: #2c2c2c;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
-      display: none;
-      z-index: 20;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    .popup-content {
-      background-color: #2c2c2c;
-      color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 500px;
-    }
-    .popup button {
-      background-color: #6a4e23;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Score Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #live-score { font-size: 18px; font-weight: bold; color: green; }
+    </style>
 </head>
 <body>
-  <div class="video-container">
-    <div id="video-player"></div>
-    <div class="logo">
-      <img src="https://raw.githubusercontent.com/AkashGillNiet/TNT3/refs/heads/main/nes.png" alt="Logo">
-    </div>
-    <div class="quality-select">
-      <select id="quality">
-        <option value="auto">Auto</option>
-        <option value="144">144p</option>
-        <option value="240">240p</option>
-        <option value="360">360p</option>
-        <option value="480">480p</option>
-        <option value="720">720p</option>
-        <option value="1080">1080p</option>
-      </select>
-    </div>
-  </div>
 
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <h2>Join our Telegram Channel</h2>
-      <button id="join-now">Join Now</button>
-      <button id="already-joined">Already Joined</button>
-    </div>
-  </div>
+    <h2>📢 Live Cricket Score</h2>
+    <div id="live-score">Loading live score...</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
-  <script>
-    // Break the stream URL into parts
-    const streamBaseUrl = "https://m118753.protect-cdn.net";  // Base URL
-    const streamPath = "/live/m1-index.m3u8";                 // Stream path
+    <script>
+        async function getLiveScore() {
+            try {
+                let response = await fetch("https://api.cricapi.com/v1/currentMatches?apikey=f26ecbe9-bfa3-4eaa-bad0-eb248ba66432&offset=0");
+                let data = await response.json();
 
-    // Combine URL parts dynamically
-    const streamUrl = streamBaseUrl + streamPath; // Complete URL
+                if (data.status !== "success") {
+                    document.getElementById("live-score").innerHTML = "⚠️ Live Score Unavailable";
+                    return;
+                }
 
-    // Initialize Clappr Player
-    const player = new Clappr.Player({
-      source: streamUrl,
-      parentId: "#video-player",
-      autoPlay: true,
-      height: "100%",
-      width: "100%",
-      mute: false,
-      playback: {
-        playInline: true,
-        preload: "auto",
-      },
-      mediacontrol: {
-        seekbar: "#FFF",
-        buttons: "#FFF",
-      },
-    });
+                let match = data.data[0]; // पहला लाइव मैच (अगर उपलब्ध हो)
+                let team1 = match.teamInfo[0].name;
+                let team2 = match.teamInfo[1].name;
+                let status = match.status;
+                let score = match.score ? `${match.score[0].r}/${match.score[0].w} (${match.score[0].o} Overs)` : "Score Unavailable";
 
-    // Handle quality selection
-    const qualitySelect = document.getElementById("quality");
-    qualitySelect.addEventListener("change", (event) => {
-      const selectedQuality = event.target.value;
+                document.getElementById("live-score").innerHTML = `
+                    <b>${team1} vs ${team2}</b> <br>
+                    <b>Status:</b> ${status} <br>
+                    <b>Score:</b> ${score}
+                `;
+            } catch (error) {
+                document.getElementById("live-score").innerHTML = "⚠️ Error Fetching Score";
+                console.error("API Fetch Error:", error);
+            }
+        }
 
-      if (selectedQuality === "auto") {
-        // Reset to auto quality handling
-        player.configure({ playback: { quality: 'auto' } });
-      } else {
-        // Adjust the quality if the option is selected
-        player.configure({ playback: { quality: selectedQuality } });
-      }
-    });
+        getLiveScore(); // Function Call (Page Load पर)
+    </script>
 
-    // Sniffer detection: Check for any sniffers and display a message
-    function detectSniffer() {
-      const isSnifferDetected = /curl|wget|httpclient|postman|python-requests/i.test(navigator.userAgent);
-      if (isSnifferDetected) {
-        alert('Sniffer detected. Access restricted.');
-        window.location.href = "about:blank"; // Redirect to a blank page
-      }
-    }
-
-    // Call sniffer detection on page load
-    detectSniffer();
-
-    // Show popup on load
-    window.onload = function() {
-      document.getElementById('popup').style.display = 'flex';
-    };
-
-    document.getElementById('join-now').onclick = function() {
-      window.open('https://t.me/SportsLiveLink18', '_blank');
-      document.getElementById('popup').style.display = 'none';
-    };
-
-    document.getElementById('already-joined').onclick = function() {
-      document.getElementById('popup').style.display = 'none';
-    };
-  </script>
 </body>
 </html>
