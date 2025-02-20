@@ -1,49 +1,5 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Score Test</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #live-score { font-size: 18px; font-weight: bold; color: green; }
-    </style>
-</head>
-<body>
+Teleegram - @SportsLiveLink18
 
-    <h2>📢 Live Cricket Score</h2>
-    <div id="live-score">Loading live score...</div>
-
-    <script>
-        async function getLiveScore() {
-            try {
-                let response = await fetch("https://api.cricapi.com/v1/currentMatches?apikey=f26ecbe9-bfa3-4eaa-bad0-eb248ba66432&offset=0");
-                let data = await response.json();
-
-                if (data.status !== "success") {
-                    document.getElementById("live-score").innerHTML = "⚠️ Live Score Unavailable";
-                    return;
-                }
-
-                let match = data.data[0]; // पहला लाइव मैच (अगर उपलब्ध हो)
-                let team1 = match.teamInfo[0].name;
-                let team2 = match.teamInfo[1].name;
-                let status = match.status;
-                let score = match.score ? `${match.score[0].r}/${match.score[0].w} (${match.score[0].o} Overs)` : "Score Unavailable";
-
-                document.getElementById("live-score").innerHTML = `
-                    <b>${team1} vs ${team2}</b> <br>
-                    <b>Status:</b> ${status} <br>
-                    <b>Score:</b> ${score}
-                `;
-            } catch (error) {
-                document.getElementById("live-score").innerHTML = "⚠️ Error Fetching Score";
-                console.error("API Fetch Error:", error);
-            }
-        }
-
-        getLiveScore(); // Function Call (Page Load पर)
-    </script>
-
-</body>
-</html>
+<iframe src="https://tes1.mylife1.top:8088/mobile/stream5_240p/playlist.m3u8?vidictid=201391703076&id=18&pk=e77add00c5af18d8ad5ca63111cf6d3593fbe0b82ccf4186ce455178f122f21f16fa60caf494c9ba2204e453dccdbfb8591753456720882976a403cdc6fde43a" 
+        width="100%" height="500px" allowfullscreen>
+</iframe> 
